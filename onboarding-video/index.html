@@ -76,7 +76,6 @@
       }
     });
 
-    // Fix: show controls when exiting fullscreen
     vid.addEventListener('webkitfullscreenchange', () => {
       if (!vid.webkitDisplayingFullscreen) {
         vid.controls = true;
