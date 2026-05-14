@@ -23,9 +23,8 @@
       height: 100dvh;
     }
     video {
+      width: 100vw;
       height: 100dvh;
-      width: auto;
-      max-width: 100%;
       object-fit: contain;
     }
     .play-btn {
@@ -63,29 +62,11 @@
   <script>
     const vid = document.getElementById('vid');
     const playBtn = document.getElementById('playBtn');
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     playBtn.addEventListener('click', () => {
       vid.play();
+      vid.controls = true;
       playBtn.classList.add('hidden');
-      if (isMobile) {
-        if (vid.webkitEnterFullscreen) vid.webkitEnterFullscreen();
-        else if (vid.requestFullscreen) vid.requestFullscreen();
-      } else {
-        vid.controls = true;
-      }
-    });
-
-    vid.addEventListener('webkitfullscreenchange', () => {
-      if (!vid.webkitDisplayingFullscreen) {
-        vid.controls = true;
-      }
-    });
-
-    document.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement) {
-        vid.controls = true;
-      }
     });
 
     vid.addEventListener('ended', () => {
