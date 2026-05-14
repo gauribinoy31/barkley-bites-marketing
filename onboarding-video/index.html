@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome to Barkley Bites</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background-color: #000;
+      background: #000;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -55,7 +55,7 @@
 <body>
   <div class="video-container">
     <video playsinline preload="auto" poster="poster.png" id="vid">
-      <source src="onboarding-video.mp4" type="video/mp4" />
+      <source src="onboarding-video.mp4" type="video/mp4"/>
     </video>
     <div class="play-btn" id="playBtn"></div>
   </div>
@@ -68,14 +68,23 @@
     playBtn.addEventListener('click', () => {
       vid.play();
       playBtn.classList.add('hidden');
-
       if (isMobile) {
-        if (vid.webkitEnterFullscreen) {
-          vid.webkitEnterFullscreen();
-        } else if (vid.requestFullscreen) {
-          vid.requestFullscreen();
-        }
+        if (vid.webkitEnterFullscreen) vid.webkitEnterFullscreen();
+        else if (vid.requestFullscreen) vid.requestFullscreen();
       } else {
+        vid.controls = true;
+      }
+    });
+
+    // Fix: show controls when exiting fullscreen
+    vid.addEventListener('webkitfullscreenchange', () => {
+      if (!vid.webkitDisplayingFullscreen) {
+        vid.controls = true;
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) {
         vid.controls = true;
       }
     });
