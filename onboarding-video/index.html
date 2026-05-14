@@ -11,36 +11,79 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100dvh;
       overflow: hidden;
     }
+    .video-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100dvh;
+    }
     video {
-      height: 100vh;
+      height: 100dvh;
       width: auto;
       max-width: 100%;
       object-fit: contain;
     }
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .play-btn::after {
+      content: '';
+      border-style: solid;
+      border-width: 14px 0 14px 24px;
+      border-color: transparent transparent transparent #000;
+      margin-left: 5px;
+    }
+    .play-btn.hidden { display: none; }
   </style>
 </head>
 <body>
-  <video autoplay playsinline id="vid">
-    <source src="onboarding-video.mp4" type="video/mp4" />
-  </video>
+  <div class="video-container">
+    <video playsinline id="vid">
+      <source src="onboarding-video.mp4" type="video/mp4" />
+    </video>
+    <div class="play-btn" id="playBtn"></div>
+  </div>
 
   <script>
     const vid = document.getElementById('vid');
-    let timeout;
+    const playBtn = document.getElementById('playBtn');
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    function showControls() {
-      vid.controls = true;
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        vid.controls = false;
-      }, 2000);
-    }
+    playBtn.addEventListener('click', () => {
+      vid.play();
+      playBtn.classList.add('hidden');
 
-    vid.addEventListener('mousemove', showControls);
-    vid.addEventListener('touchstart', showControls);
+      if (isMobile) {
+        if (vid.webkitEnterFullscreen) {
+          vid.webkitEnterFullscreen();
+        } else if (vid.requestFullscreen) {
+          vid.requestFullscreen();
+        }
+      } else {
+        vid.controls = true;
+      }
+    });
+
+    vid.addEventListener('ended', () => {
+      vid.controls = false;
+      playBtn.classList.remove('hidden');
+    });
   </script>
 </body>
 </html>
